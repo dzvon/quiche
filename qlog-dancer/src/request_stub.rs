@@ -24,7 +24,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-use qlog::events::h3::HttpHeader;
+use qlog::events::http3::HttpHeader;
 use std::borrow::Cow;
 use std::fmt::Display;
 
@@ -326,8 +326,8 @@ impl tabled::Tabled for HttpRequestStub {
 
 pub fn find_header_value(hdrs: &[HttpHeader], name: &str) -> Option<String> {
     hdrs.iter()
-        .find(|&h| h.name == name)
-        .map(|h| h.value.clone())
+        .find(|&h| h.name.as_deref() == Some(name))
+        .and_then(|h| h.value.clone())
 }
 
 impl HttpRequestStub {
